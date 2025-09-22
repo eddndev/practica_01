@@ -6,7 +6,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 299,
       stock: 10,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 2,
@@ -15,7 +15,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
       stock: 8,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 3,
@@ -24,7 +24,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 329,
       stock: 12,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 4,
@@ -33,7 +33,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 299,
       stock: 7,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 5,
@@ -42,7 +42,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 399,
       stock: 5,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 6,
@@ -51,7 +51,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 329,
       stock: 9,
-      categoria: 'electrica',
+      categoria: 'Electrica',
   },
   {
       id: 7,
@@ -60,7 +60,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
       stock: 6,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
   {
       id: 8,
@@ -69,7 +69,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 379,
       stock: 11,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
   {
       id: 9,
@@ -78,7 +78,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 289,
       stock: 4,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
   {
       id: 10,
@@ -87,7 +87,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
       stock: 13,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
   {
       id: 11,
@@ -96,7 +96,7 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 399,
       stock: 3,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
   {
       id: 12,
@@ -105,6 +105,6 @@ export const db = [
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 379,
       stock: 15,
-      categoria: 'acustica',
+      categoria: 'Acustica',
   },
 ]

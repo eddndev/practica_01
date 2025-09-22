@@ -9,6 +9,8 @@ export function Guitarras({guitarra, addToCart}) { // prop
                     </div>
                     <div className="col-8">
                         <h3 className="text-black fs-4 fw-bold text-uppercase">{guitarra.name}</h3>
+                        <p className="">Categoria: {` `} 
+                            <span className="text-orange-300">{guitarra.categoria}</span></p>
                         <p>{guitarra.description}</p>
                         <p className="fw-black text-primary fs-3">${guitarra.price}</p> {/* accedemos a la base de datos del prop, y extraemos el valor de cada elemento */}
                         <button 
