@@ -3,6 +3,8 @@
   font-weight: 900;
 }
 
+@import "tailwindcss";
+
 .btn-dark {
   text-transform: uppercase;
 }
