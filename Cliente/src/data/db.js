@@ -5,6 +5,8 @@ export const db = [
       image: 'guitarra_01',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 299,
+      stock: 10,
+      categoria: 'electrica',
   },
   {
       id: 2,
@@ -12,6 +14,8 @@ export const db = [
       image: 'guitarra_02',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
+      stock: 8,
+      categoria: 'electrica',
   },
   {
       id: 3,
@@ -19,6 +23,8 @@ export const db = [
       image: 'guitarra_03',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 329,
+      stock: 12,
+      categoria: 'electrica',
   },
   {
       id: 4,
@@ -26,6 +32,8 @@ export const db = [
       image: 'guitarra_04',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 299,
+      stock: 7,
+      categoria: 'electrica',
   },
   {
       id: 5,
@@ -33,6 +41,8 @@ export const db = [
       image: 'guitarra_05',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 399,
+      stock: 5,
+      categoria: 'electrica',
   },
   {
       id: 6,
@@ -40,6 +50,8 @@ export const db = [
       image: 'guitarra_06',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 329,
+      stock: 9,
+      categoria: 'electrica',
   },
   {
       id: 7,
@@ -47,6 +59,8 @@ export const db = [
       image: 'guitarra_07',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
+      stock: 6,
+      categoria: 'acustica',
   },
   {
       id: 8,
@@ -54,6 +68,8 @@ export const db = [
       image: 'guitarra_08',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 379,
+      stock: 11,
+      categoria: 'acustica',
   },
   {
       id: 9,
@@ -61,6 +77,8 @@ export const db = [
       image: 'guitarra_09',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 289,
+      stock: 4,
+      categoria: 'acustica',
   },
   {
       id: 10,
@@ -68,6 +86,8 @@ export const db = [
       image: 'guitarra_10',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 349,
+      stock: 13,
+      categoria: 'acustica',
   },
   {
       id: 11,
@@ -75,6 +95,8 @@ export const db = [
       image: 'guitarra_11',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 399,
+      stock: 3,
+      categoria: 'acustica',
   },
   {
       id: 12,
@@ -82,5 +104,7 @@ export const db = [
       image: 'guitarra_12',
       description: 'Morbi ornare augue nisl, vel elementum dui mollis vel. Curabitur non ex id eros fermentum hendrerit.',
       price: 379,
+      stock: 15,
+      categoria: 'acustica',
   },
 ]
