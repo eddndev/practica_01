@@ -26,23 +26,49 @@ public class Servidor {
             for(;;){
                 Socket cl = s.accept();
                 System.out.println("Cliente conectado desde " + cl.getInetAddress() + ":" + cl.getPort());
-                PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
-                BufferedReader br = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-            
-                // Lógica de ejemplo: Ignora la entrada del cliente y envía la lista de productos.
-                String listaProductos = inventario.stream()
-                                                  .map(p -> p.nombre)
-                                                  .collect(Collectors.joining("; "));
                 
-                pw.println("Productos disponibles: " + listaProductos);
-                pw.flush();
-
-                br.close();
-                pw.close();
-                cl.close();
+                // Manejar cada cliente en un hilo separado para no bloquear el servidor
+                new Thread(() -> handleClient(cl)).start();
             }
         }catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    private static void handleClient(Socket cl) {
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
+             BufferedReader br = new BufferedReader(new InputStreamReader(cl.getInputStream()))) {
+
+            String command = br.readLine();
+            System.out.println("Comando recibido: " + command);
+
+            if (command == null) return;
+
+            if (command.startsWith("GET_CATEGORY:")) {
+                String categoria = command.substring(13);
+                String response = inventario.stream()
+                                            .filter(p -> p.categoria.equalsIgnoreCase(categoria))
+                                            .map(Producto::toString)
+                                            .collect(Collectors.joining("\n"));
+                pw.println(response);
+            } else if (command.equals("GET_ALL")) {
+                String response = inventario.stream()
+                                            .map(Producto::toString)
+                                            .collect(Collectors.joining("\n"));
+                pw.println(response);
+            } else {
+                pw.println("ERROR: Comando no reconocido.");
+            }
+            pw.flush();
+
+        } catch (Exception e) {
+            System.err.println("Error manejando al cliente: " + e.getMessage());
+        } finally {
+            try {
+                cl.close();
+            } catch (Exception e) {
+                // Ignorar
+            }
         }
     }
 
@@ -54,26 +80,27 @@ public class Servidor {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine();
                 
-                // Parsing manual para evitar problemas con regex y comas en la descripcion
-                int primerDelim = linea.indexOf(',');
-                int segundoDelim = linea.indexOf(',', primerDelim + 1);
-                int ultimoDelim = linea.lastIndexOf(',');
-                int penultimoDelim = linea.lastIndexOf(',', ultimoDelim - 1);
-                int antepenultimoDelim = linea.lastIndexOf(',', penultimoDelim - 1);
+                // Parsing manual para 7 campos
+                int d1 = linea.indexOf(',');
+                int d2 = linea.indexOf(',', d1 + 1);
+                int d7 = linea.lastIndexOf(',');
+                int d6 = linea.lastIndexOf(',', d7 - 1);
+                int d5 = linea.lastIndexOf(',', d6 - 1);
+                int d4 = linea.lastIndexOf(',', d5 - 1);
 
-                if (primerDelim > -1 && segundoDelim > -1 && ultimoDelim > -1 && penultimoDelim > -1 && antepenultimoDelim > -1) {
-                    int id = Integer.parseInt(linea.substring(0, primerDelim));
-                    String nombre = linea.substring(primerDelim + 1, segundoDelim);
-                    String descripcion = linea.substring(segundoDelim + 1, antepenultimoDelim);
-                    // Quitar comillas si existen
+                if (d1 > -1 && d2 > -1 && d4 > -1 && d5 > -1 && d6 > -1 && d7 > -1) {
+                    int id = Integer.parseInt(linea.substring(0, d1));
+                    String nombre = linea.substring(d1 + 1, d2);
+                    String descripcion = linea.substring(d2 + 1, d4);
                     if (descripcion.startsWith("\"") && descripcion.endsWith("\"")) {
                         descripcion = descripcion.substring(1, descripcion.length() - 1);
                     }
-                    double precio = Double.parseDouble(linea.substring(antepenultimoDelim + 1, penultimoDelim));
-                    int stock = Integer.parseInt(linea.substring(penultimoDelim + 1, ultimoDelim));
-                    String rutaImagen = linea.substring(ultimoDelim + 1);
+                    double precio = Double.parseDouble(linea.substring(d4 + 1, d5));
+                    int stock = Integer.parseInt(linea.substring(d5 + 1, d6));
+                    String rutaImagen = linea.substring(d6 + 1, d7);
+                    String categoria = linea.substring(d7 + 1);
 
-                    inventario.add(new Producto(id, nombre, descripcion, precio, stock, rutaImagen));
+                    inventario.add(new Producto(id, nombre, descripcion, precio, stock, rutaImagen, categoria));
                 }
             }
         } catch (Exception e) {
