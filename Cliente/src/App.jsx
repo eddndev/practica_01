@@ -5,16 +5,6 @@ import { db } from './data/db'
 
 function App() {
 
-    // // State
-    // const [auth, setAuth] = useState(false)
-    // // Effect
-    // useEffect (() => {
-    //     console.log('Effect listo')
-    // }, []) // Si en la parte de dependencias agregamos un arreglo vacio, indicamos que no tiene dependencias, por tanto se ejecuta en cuanto arraque la pagina
-
-    // useEffect (() => {
-    //     console.log('autenticado')
-    // }, [auth]) //Si dentro de las corchetes tiene una variable, este se ejecutara cuando menos una vez reciba el valor de auth, depende de la variable para ejecutarse
 
     //Carrito inicial
     const initialCart = () => {
@@ -24,6 +14,16 @@ function App() {
 
     //Preparamos la bd para usarla
     const [data, setData] = useState([])
+
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas')
+
+    // Obtener categorías únicas
+    const categorias = ['Todas', ...new Set(db.map(guitarra => guitarra.categoria))]
+
+    // Filtrar guitarras según la categoría seleccionada
+    const guitarrasFiltradas = categoriaSeleccionada === 'Todas'
+        ? data
+        : data.filter(guitarra => guitarra.categoria === categoriaSeleccionada)
 
     const MAX_ITEMS = 5
     const MIN_ITEMS = 1
@@ -109,15 +109,6 @@ function App() {
 
   return (
       <>
-      {/* Aqui renderizamos el componente dentro de este componente */}
-      
-        {/* 
-            Debido a que JSX tiene palabras reservadas, como lo es class, no podemos utilizar esa palabra dentro del codigo HTML, por lo que tenemos que utilizar las palabras a resevadas de React. En esta caso para darle una calse a un elemento HTML en React, se utiliza className para evitar utilizar la palabra reservada class 
-            
-            Correcto: <header className="py-5 header">
-            Incorrecto <header class="py-5 header">
-        
-        */}
         
         <Header
             carro = {carro}
@@ -128,19 +119,29 @@ function App() {
         />
 
         <main className="container-xl mt-5">
-            <h2 className="text-center">Nuestra Colección</h2>
 
-            <div className="row mt-5">
-                {/* Iterando sobre el arreglo de data */}
-                {data.map((guitarra) => ( // Por cada guitarra que haya en el array
-                    <Guitarras
-                        //Creamos un prop PADRE
-                        key={guitarra.id} //Creamos el ID que necesita cuando iteramos
-                        guitarra = {guitarra} //Creamos una propiedad guitarra (este nombre debe recibir como argumento el prop hijo) y el valor de esa propiedad es el objeto llamdo guitarra (argumento del arrow funciton)
-                        addToCart = {addToCart} //Le pasamos esta funcion como propiedad al componente
-                    />
-                ))}
-            </div>
+            <h2 className="text-center px-5">Nuestra Colección</h2>
+            <div className="flex gap-4 justify-center my-4">
+                    {categorias.map(cat => (
+                        <button
+                            key={cat}
+                            className={`px-4 py-2 rounded ${categoriaSeleccionada === cat ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            onClick={() => setCategoriaSeleccionada(cat)}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="row mt-5">
+                    {guitarrasFiltradas.map((guitarra) => (
+                        <Guitarras
+                            key={guitarra.id}
+                            guitarra={guitarra}
+                            addToCart={addToCart}
+                        />
+                    ))}
+                </div>
         </main>
 
 
