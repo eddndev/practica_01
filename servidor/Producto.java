@@ -1,4 +1,6 @@
 public class Producto {
+    // Este es un POJO (Plain Old Java Object). 
+    // Gson lo convertira a JSON automaticamente.
     int id;
     String nombre;
     String descripcion;
@@ -17,9 +19,9 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    // Convierte el producto a un formato similar al CSV para facil transmision
+    // toString() ya no se usa para la respuesta, pero es util para debugging.
     @Override
     public String toString() {
-        return id + "," + nombre + ",\"" + descripcion + "\"," + precio + "," + stock + "," + rutaImagen + "," + categoria;
+        return "ID: " + id + ", Nombre: " + nombre;
     }
 }
