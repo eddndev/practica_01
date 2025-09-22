@@ -1,7 +1,7 @@
-ID,Nombre,Marca,Tipo,Precio,Stock
-101,Laptop Gamer,MSI,Electronica,1500.00,10
-102,Mouse Inalambrico,Logitech,Electronica,50.00,50
-201,Teclado Mecanico,Corsair,Electronica,120.00,30
-301,Monitor 27 pulgadas,Dell,Electronica,300.00,20
-401,Silla de Oficina,Herman Miller,Muebles,950.00,5
-402,Escritorio de pie,Vari,Muebles,600.00,8
+id,nombre,descripcion,precio,stock,ruta_imagen
+101,Laptop Gamer,"Potente laptop para juegos con tarjeta grafica dedicada y procesador de ultima generacion.",1500.00,10,images/laptop_gamer.jpg
+102,Mouse Inalambrico,"Mouse ergonomico con alta precision y bateria de larga duracion.",50.00,50,images/mouse_inalambrico.jpg
+201,Teclado Mecanico,"Teclado con switches mecanicos para una respuesta tactil y rapida.",120.00,30,images/teclado_mecanico.jpg
+301,Monitor 27 pulgadas,"Monitor QHD de 27 pulgadas con colores vibrantes y 144Hz de refresco.",300.00,20,images/monitor_27.jpg
+401,Silla de Oficina,"Silla ergonomica con soporte lumbar ajustable y materiales de alta calidad.",950.00,5,images/silla_oficina.jpg
+402,Escritorio de pie,"Escritorio ajustable en altura para trabajar de pie o sentado.",600.00,8,images/escritorio_pie.jpg
