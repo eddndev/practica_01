@@ -1,0 +1,13 @@
+id,nombre,descripcion,precio,stock,ruta_imagen,categoria
+1,Lukather,"Diseñada para la versatilidad, esta guitarra ofrece tonos calidos y potentes, ideal para rock progresivo y solos melodicos.",299,10,images/guitarra_01.jpg,electrica
+2,SRV,"Captura el sonido crudo y conmovedor del blues de Texas. Equipada con pastillas de bobina simple para un tono brillante y agresivo.",349,8,images/guitarra_02.jpg,electrica
+3,Borland,"Perfecta para el rock experimental y alternativo. Su diseño unico y su electronica versatil permiten explorar nuevos paisajes sonoros.",329,12,images/guitarra_03.jpg,electrica
+4,VAI,"Una obra de arte de la ingenieria musical. Con un mastil ultrarrapido y un puente flotante estable, es la herramienta definitiva para el virtuoso.",299,7,images/guitarra_04.jpg,electrica
+5,Thompson,"Inspirada en el folk-rock, esta guitarra tiene una resonancia excepcional y un tono equilibrado que brilla en cualquier mezcla.",399,5,images/guitarra_05.jpg,electrica
+6,White,"Simple, directa y llena de actitud. Ideal para garage rock y blues, con un sonido crudo que corta a traves de la distorsion.",329,9,images/guitarra_06.jpg,electrica
+7,Cobain,"Un icono del grunge. Modificada para zurdos y con humbuckers potentes, es perfecta para riffs pesados y estribillos explosivos.",349,6,images/guitarra_07.jpg,acustica
+8,Dale,"La reina del surf rock. Su tono perlado y su tremolo expresivo te transportaran directamente a las olas de California.",379,11,images/guitarra_08.jpg,acustica
+9,Krieger,"Con un sonido psicodelico y resonante, esta guitarra es ideal para explorar texturas y paisajes sonoros de los años 60.",289,4,images/guitarra_09.jpg,acustica
+10,Campbell,"Construida para el country y el pop, ofrece un sonido claro y nitido con una ejecucion suave y comoda.",349,13,images/guitarra_10.jpg,acustica
+11,Reed,"Minimalista y vanguardista. Su sonido distintivo es perfecto para el art rock y la experimentacion sonora.",399,3,images/guitarra_11.jpg,acustica
+12,Hazel,"El alma del funk y el soul. Sus pastillas entregan un ritmo percusivo y solos llenos de sentimiento.",379,15,images/guitarra_12.jpg,acustica
