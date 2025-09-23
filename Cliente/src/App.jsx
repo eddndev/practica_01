@@ -12,25 +12,36 @@ function App() {
         return localStorageCart ? JSON.parse(localStorageCart) : [] // Si tiene algun string el carro, lo com=nvertimos a arreglo para poder mostrarlo en el carro, de lo contrario setea el carro con un arreglo vacio para poder agregar elementos
     }
 
-    //Preparamos la bd para usarla
     const [data, setData] = useState([])
+    const [categorias, setCategorias] = useState(['Todas'])
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas')
-
-    // Obtener categorías únicas
-    const categorias = ['Todas', ...new Set(db.map(guitarra => guitarra.categoria))]
 
     // Filtrar guitarras según la categoría seleccionada
     const guitarrasFiltradas = categoriaSeleccionada === 'Todas'
         ? data
-        : data.filter(guitarra => guitarra.categoria === categoriaSeleccionada)
+        : data.filter(guitarra => guitarra.categoria.toLowerCase() === categoriaSeleccionada.toLowerCase())
 
     const MAX_ITEMS = 5
     const MIN_ITEMS = 1
 
-    useEffect (() => {
-        setData(db)
-    },[]) //Si esta listo, actua y le da la base de datos a data
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const url = 'http://localhost:3001/api/productos';
+                const respuesta = await fetch(url);
+                const resultado = await respuesta.json();
+                
+                // Sincronizar el estado con los datos del backend
+                setData(resultado.products);
+                setCategorias(['Todas', ...resultado.filters.categories]);
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData();
+    }, [])
 
     // State para el carrito
     const [carro, setCarro] = useState(initialCart) // El carro inicialmente estara vacio
