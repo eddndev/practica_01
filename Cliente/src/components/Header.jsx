@@ -91,7 +91,7 @@ function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyC
                                                 Comprar
                                             </button>
                                             <button
-                                                className="bg-red-100 text-red-700 w-full mt-2 py-2 rounded border border-red-300 hover:bg-red-200 transition font-semibold"
+                                                className="bg-red-100 text-red-700 w-full mt-3 py-2 rounded border border-red-300 hover:bg-red-200 transition font-semibold"
                                                 onClick={emptyCar}
                                             >
                                                 Vaciar Carrito
