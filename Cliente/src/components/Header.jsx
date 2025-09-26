@@ -30,51 +30,47 @@ function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyC
                             >
                                 <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
 
-                                <div id="carrito" className="bg-white p-3">
-                                    { isEmpty ? ( // Si el carro esta vacio, muestra esto
-                                        <p className="text-center">El carrito esta vacio</p>
-                                    ) : ( // De lo contrario mostramos esto
+                                <div id="carrito" className="bg-white p-4 rounded-lg shadow-lg min-w-[320px]">
+                                    { isEmpty ? (
+                                        <p className="text-center text-gray-500">El carrito está vacío</p>
+                                    ) : (
                                         <>
-                                            <table className="w-100 table">
+                                            <table className="w-full text-center table-auto">
                                                 <thead>
-                                                    <tr>
-                                                        <th>Imagen</th>
-                                                        <th>Nombre</th>
-                                                        <th>Precio</th>
-                                                        <th>Cantidad</th>
-                                                        <th></th>
+                                                    <tr className="bg-gray-100">
+                                                        <th className="py-2">Nombre</th>
+                                                        <th className="py-2">Precio</th>
+                                                        <th className="py-2">Cantidad</th>
+                                                        <th className="py-2"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {carro.map(guitarra => ( //por cada guitarra se mostrara lo siguiente
-                                                        <tr key={guitarra.id}>
-                                                            <td>
-                                                                <img className="img-fluid" src={`/img/${guitarra.image}.jpg`} alt="imagen guitarra" />
+                                                    {carro.map(guitarra => (
+                                                        <tr key={guitarra.id} className="border-b last:border-b-0">
+                                                            <td className="py-2">{guitarra.name}</td>
+                                                            <td className="py-2 font-semibold">${guitarra.price}</td>
+                                                            <td className="py-2">
+                                                                <div className="flex items-center justify-center gap-2">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="bg-gray-800 text-white px-2 py-1 rounded hover:bg-gray-700 transition"
+                                                                        onClick={() => decreaseQuantity(guitarra.id)}
+                                                                    >
+                                                                        -
+                                                                    </button>
+                                                                    <span className="mx-2">{guitarra.quantity}</span>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="bg-gray-800 text-white px-2 py-1 rounded hover:bg-gray-700 transition"
+                                                                        onClick={() => increaseQuantity(guitarra.id)}
+                                                                    >
+                                                                        +
+                                                                    </button>
+                                                                </div>
                                                             </td>
-                                                            <td>{guitarra.name}</td>
-                                                            <td className="fw-bold">
-                                                                    {guitarra.price}
-                                                            </td>
-                                                            <td className="flex align-items-start gap-4">
+                                                            <td className="py-2">
                                                                 <button
-                                                                    type="button"
-                                                                    className="btn btn-dark"
-                                                                    onClick={() => decreaseQuantity(guitarra.id)}
-                                                                >
-                                                                    -
-                                                                </button>
-                                                                    {guitarra.quantity}
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-dark"
-                                                                    onClick={() => increaseQuantity(guitarra.id)}
-                                                                >
-                                                                    +
-                                                                </button>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    className="btn btn-danger"
+                                                                    className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 transition"
                                                                     type="button"
                                                                     onClick={() => romeFromCart(guitarra.id)}
                                                                 >
@@ -83,17 +79,25 @@ function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyC
                                                             </td>
                                                         </tr>
                                                     ))}
-                                                    
                                                 </tbody>
                                             </table>
-                                            <p className="text-end">Total pagar: <span className="fw-bold">${cartTotal}</span></p>
-                                            <button className="btn btn-dark w-100 mt-3 p-2" onClick={Comprar}>Comprar</button>
-                                            <button className="btn btn-dark w-100 mt-3 p-2" onClick={emptyCar} >Vaciar Carrito</button>
+                                            <p className="text-right mt-2 text-lg">
+                                                Total a pagar: <span className="font-bold">${cartTotal}</span>
+                                            </p>
+                                            <button
+                                                className="bg-gray-800 text-white w-full mt-3 py-2 rounded hover:bg-gray-700 transition font-semibold"
+                                                onClick={Comprar}
+                                            >
+                                                Comprar
+                                            </button>
+                                            <button
+                                                className="bg-red-100 text-red-700 w-full mt-2 py-2 rounded border border-red-300 hover:bg-red-200 transition font-semibold"
+                                                onClick={emptyCar}
+                                            >
+                                                Vaciar Carrito
+                                            </button>
                                         </>
-                                    
                                     )}
-                                    
-                                    
                                 </div>
                             </div>
                         </nav>
