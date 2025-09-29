@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header' //Importamos el componente para poder utilizarlo
 import { Guitarras } from './components/Guitarras'
-import { db } from './data/db'
 
 function App() {
 

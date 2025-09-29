@@ -81,7 +81,7 @@ function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyC
                                                     ))}
                                                 </tbody>
                                             </table>
-                                            <p className="text-right mt-2 text-lg">
+                                            <p className="text-right mt-3 text-lg">
                                                 Total a pagar: <span className="font-bold">${cartTotal}</span>
                                             </p>
                                             <button
