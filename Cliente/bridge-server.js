@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import net from 'net';
+import path from 'path';
 
 const app = express();
 const PORT = 3001; // Puerto para el servidor intermediario
@@ -10,6 +11,39 @@ const JAVA_SERVER_HOST = 'localhost';
 app.use(cors());
 app.use(express.json());
 
+// Endpoint para obtener las imágenes
+app.get('/img/:imageName', (req, res) => {
+    const { imageName } = req.params;
+    const client = new net.Socket();
+
+    client.connect(JAVA_SERVER_PORT, JAVA_SERVER_HOST, () => {
+        console.log(`Solicitando imagen: ${imageName}`);
+        client.write(`GET_IMAGE:img/${imageName}\n`);
+    });
+
+    const extension = path.extname(imageName).toLowerCase();
+    let contentType = 'image/jpeg'; // default
+    if (extension === '.png') {
+        contentType = 'image/png';
+    } else if (extension === '.svg') {
+        contentType = 'image/svg+xml';
+    }
+    res.setHeader('Content-Type', contentType);
+
+    client.on('data', (data) => {
+        res.write(data);
+    });
+
+    client.on('close', () => {
+        res.end();
+    });
+
+    client.on('error', (err) => {
+        console.error('Error de conexión con el servidor Java:', err.message);
+        res.status(500).send('Error interno del servidor');
+    });
+});
+
 // Endpoint principal para obtener los productos
 app.get('/api/productos', (req, res) => {
     const client = new net.Socket();
@@ -17,7 +51,6 @@ app.get('/api/productos', (req, res) => {
 
     client.connect(JAVA_SERVER_PORT, JAVA_SERVER_HOST, () => {
         console.log('Puente conectado al servidor Java.');
-        // Determinar el comando a enviar basado en los query params
         const categoria = req.query.categoria;
         const command = categoria ? `GET_CATEGORY:${categoria}` : 'GET_ALL';
         console.log(`Enviando comando a Java: ${command}`);
@@ -33,11 +66,10 @@ app.get('/api/productos', (req, res) => {
         try {
             const parsedData = JSON.parse(jsonDataString);
 
-            // Traduccion de campos para que coincidan con el frontend de React
             const translatedProducts = parsedData.products.map(p => ({
                 id: p.id,
-                name: p.nombre, // Traducir 'nombre' a 'name'
-                image: p.rutaImagen.replace('images/', '').replace('.jpg', ''), // Traducir y limpiar 'rutaImagen' a 'image'
+                name: p.nombre,
+                image: p.rutaImagen.replace('img/', ''), // Solo quitar el prefijo 'img/'
                 description: p.descripcion,
                 price: p.precio,
                 stock: p.stock,

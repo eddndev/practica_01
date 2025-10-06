@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.io.IOException;
 
 public class Servidor {
 
@@ -35,30 +38,46 @@ public class Servidor {
                     cl = s.accept();
                     System.out.println("Cliente conectado desde " + cl.getInetAddress() + ":" + cl.getPort());
                     
-                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
                     BufferedReader br = new BufferedReader(new InputStreamReader(cl.getInputStream()));
-
                     String command = br.readLine();
                     System.out.println("Comando recibido: " + command);
 
-                    List<Producto> productosFiltrados = new ArrayList<>(inventario);
-
                     if (command != null) {
-                        if (command.startsWith("GET_CATEGORY:")) {
-                            String categoria = command.substring(13);
-                            productosFiltrados = inventario.stream()
-                                .filter(p -> p.categoria.equalsIgnoreCase(categoria))
-                                .collect(Collectors.toList());
-                        } else if (!command.equals("GET_ALL")) {
-                            // Si no es GET_ALL o GET_CATEGORY, no devolvemos productos.
-                            productosFiltrados.clear(); 
+                        if (command.startsWith("GET_IMAGE:")) {
+                            String imagePath = command.substring(10).replace("/", File.separator);
+                            File imageFile = new File("servidor" + File.separator + "public" + File.separator + imagePath);
+                            
+                            if (imageFile.exists() && !imageFile.isDirectory()) {
+                                System.out.println("Enviando imagen: " + imageFile.getPath());
+                                try (OutputStream out = cl.getOutputStream()) {
+                                    Files.copy(imageFile.toPath(), out);
+                                    out.flush();
+                                } catch (IOException e) {
+                                    System.err.println("Error al enviar imagen: " + e.getMessage());
+                                }
+                            } else {
+                                System.err.println("Imagen no encontrada: " + imageFile.getPath());
+                                cl.close();
+                            }
+                        } else {
+                            PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
+                            List<Producto> productosFiltrados = new ArrayList<>(inventario);
+
+                            if (command.startsWith("GET_CATEGORY:")) {
+                                String categoria = command.substring(13);
+                                productosFiltrados = inventario.stream()
+                                    .filter(p -> p.categoria.equalsIgnoreCase(categoria))
+                                    .collect(Collectors.toList());
+                            } else if (!command.equals("GET_ALL")) {
+                                productosFiltrados.clear(); 
+                            }
+
+                            ApiResponse response = new ApiResponse(filterData, productosFiltrados);
+                            String jsonResponse = gson.toJson(response);
+                            pw.println(jsonResponse);
+                            pw.flush();
                         }
                     }
-
-                    ApiResponse response = new ApiResponse(filterData, productosFiltrados);
-                    String jsonResponse = gson.toJson(response);
-                    pw.println(jsonResponse);
-                    pw.flush();
 
                 } catch (Exception e) {
                     System.err.println("Error manejando al cliente: " + e.getMessage());
