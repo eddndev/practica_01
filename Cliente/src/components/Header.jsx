@@ -1,19 +1,13 @@
 // NOTA: opcionalmente se puede utilizar el hook useMemo para un mejor rendimiento en la pagina
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 
-function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyCar}) {
-    // Dentro de la funcion, podemos agregar codigo HTML.
+function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyCar, handlePurchase}) {
 
-    //State derivado
     const initialValue = 0
-    const isEmpty  = useMemo (() => carro.length === 0, [carro] ) // Reacciona solo si carro se actualiza, solo si la dependencia
-    const cartTotal = useMemo(() => carro.reduce((total, item) => total + (item.quantity * item.price), initialValue), [carro])  // Nos permite ir sumando cada valor que tengamos sobre el array que estemos trabajando, en este caso el array es carro
-    const Comprar = () => {
-        console.log("Se compra")
-    }
+    const isEmpty  = useMemo (() => carro.length === 0, [carro] )
+    const cartTotal = useMemo(() => carro.reduce((total, item) => total + (item.quantity * item.price), initialValue), [carro])
 
     return (
-        // Lo que este dentro de este return, sera lo que se mostrara en pantalla
         
         <> {/* Creamos un fragmento */} 
             <header className="py-5 header">
@@ -86,7 +80,7 @@ function Header({carro, romeFromCart, increaseQuantity, decreaseQuantity, emptyC
                                             </p>
                                             <button
                                                 className="bg-gray-800 text-white w-full mt-3 py-2 rounded hover:bg-gray-700 transition font-semibold"
-                                                onClick={Comprar}
+                                                onClick={handlePurchase}
                                             >
                                                 Comprar
                                             </button>

@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
-import Header from './components/Header' //Importamos el componente para poder utilizarlo
+import Header from './components/Header'
 import { Guitarras } from './components/Guitarras'
+import TicketModal from './components/TicketModal'
 
 function App() {
 
-
-    //Carrito inicial
     const initialCart = () => {
         const localStorageCart = localStorage.getItem('carro')
-        return localStorageCart ? JSON.parse(localStorageCart) : [] // Si tiene algun string el carro, lo com=nvertimos a arreglo para poder mostrarlo en el carro, de lo contrario setea el carro con un arreglo vacio para poder agregar elementos
+        return localStorageCart ? JSON.parse(localStorageCart) : []
     }
 
     const [data, setData] = useState([])
+    const [ticket, setTicket] = useState(null)
     const [categorias, setCategorias] = useState(['Todas'])
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('Todas')
@@ -114,18 +114,62 @@ function App() {
     }
 
     function emptyCar(){
-        setCarro([]) // Vaciamos el carrito
+        setCarro([])
+    }
+
+    async function handlePurchase() {
+        try {
+            const url = 'http://localhost:3001/api/purchase';
+            const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(carro)
+            });
+            const resultado = await respuesta.json();
+
+            if (resultado.success) {
+                setTicket(resultado);
+                setCarro([]);
+            } else {
+                alert(`Error en la compra: ${resultado.message}`);
+            }
+        } catch (error) {
+            console.log(error);
+            alert('Error al conectar con el servidor para realizar la compra.');
+        }
+    }
+
+    function closeTicketModal() {
+        setTicket(null);
+        const fetchData = async () => {
+            try {
+                const url = 'http://localhost:3001/api/productos';
+                const respuesta = await fetch(url);
+                const resultado = await respuesta.json();
+                setData(resultado.products);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchData();
     }
 
   return (
       <>
-        
         <Header
             carro = {carro}
             romeFromCart = {romeFromCart}
             increaseQuantity = {increaseQuantity}
             decreaseQuantity = {decreaseQuantity}
             emptyCar = {emptyCar}
+            handlePurchase={handlePurchase}
+        />
+
+        <TicketModal
+            ticket={ticket}
+            onClose={closeTicketModal}
         />
 
         <main className="container-xl mt-5">

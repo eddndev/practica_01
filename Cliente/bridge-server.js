@@ -94,6 +94,48 @@ app.get('/api/productos', (req, res) => {
     });
 });
 
+// Endpoint para procesar la compra
+app.post('/api/purchase', (req, res) => {
+    const cart = req.body;
+    const client = new net.Socket();
+    let responseData = '';
+
+    client.connect(JAVA_SERVER_PORT, JAVA_SERVER_HOST, () => {
+        console.log('Puente conectado al servidor Java para la compra.');
+
+        // Mapear de `price` a `precio` y de `name` a `nombre` antes de enviar
+        const cartForJava = cart.map(item => ({
+            ...item,
+            precio: item.price,
+            nombre: item.name
+        }));
+
+        const cartString = JSON.stringify(cartForJava);
+        console.log(`Enviando comando de compra a Java: BUY:${cartString}`);
+        client.write(`BUY:${cartString}\n`);
+    });
+
+    client.on('data', (data) => {
+        responseData += data.toString();
+    });
+
+    client.on('close', () => {
+        console.log('Conexión con el servidor Java cerrada.');
+        try {
+            const parsedData = JSON.parse(responseData);
+            res.json(parsedData);
+        } catch (error) {
+            console.error('Error al parsear JSON del servidor Java:', error, `Datos recibidos: ${responseData}`);
+            res.status(500).json({ error: 'No se pudieron procesar los datos del servidor principal.' });
+        }
+    });
+
+    client.on('error', (err) => {
+        console.error('Error de conexión con el servidor Java:', err.message);
+        res.status(500).json({ error: 'No se pudo conectar con el servidor principal.' });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor intermediario (puente) escuchando en http://localhost:${PORT}`);
 });
