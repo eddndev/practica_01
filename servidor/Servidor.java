@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -15,6 +16,10 @@ import java.util.stream.Collectors;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Servidor {
 
@@ -59,6 +64,9 @@ public class Servidor {
                                 System.err.println("Imagen no encontrada: " + imageFile.getPath());
                                 cl.close();
                             }
+                        } else if (command.startsWith("BUY:")) {
+                            String jsonCart = command.substring(4);
+                            handlePurchase(jsonCart, cl);
                         } else {
                             PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
                             List<Producto> productosFiltrados = new ArrayList<>(inventario);
@@ -69,7 +77,7 @@ public class Servidor {
                                     .filter(p -> p.categoria.equalsIgnoreCase(categoria))
                                     .collect(Collectors.toList());
                             } else if (!command.equals("GET_ALL")) {
-                                productosFiltrados.clear(); 
+                                productosFiltrados.clear();
                             }
 
                             ApiResponse response = new ApiResponse(filterData, productosFiltrados);
@@ -78,7 +86,6 @@ public class Servidor {
                             pw.flush();
                         }
                     }
-
                 } catch (Exception e) {
                     System.err.println("Error manejando al cliente: " + e.getMessage());
                 } finally {
@@ -129,6 +136,64 @@ public class Servidor {
         } catch (Exception e) {
             System.err.println("Error al cargar el archivo de productos: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private static synchronized void handlePurchase(String jsonCart, Socket cl) throws IOException {
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Type listType = new TypeToken<ArrayList<Producto>>(){}.getType();
+            List<Producto> cartItems = gson.fromJson(jsonCart, listType);
+
+            if (cartItems == null || cartItems.isEmpty()) {
+                throw new Exception("El carrito está vacío.");
+            }
+
+            // Validar stock
+            for (Producto item : cartItems) {
+                Producto productInInventory = inventario.stream()
+                    .filter(p -> p.id == item.id)
+                    .findFirst()
+                    .orElse(null);
+                if (productInInventory == null || productInInventory.stock < item.quantity) {
+                    throw new Exception("Stock insuficiente para " + (productInInventory != null ? productInInventory.nombre : "un producto desconocido"));
+                }
+            }
+
+            // Actualizar inventario
+            for (Producto item : cartItems) {
+                for (Producto product : inventario) {
+                    if (product.id == item.id) {
+                        product.stock -= item.quantity;
+                        break;
+                    }
+                }
+            }
+            actualizarInventarioCSV();
+
+            response.put("success", true);
+            response.put("message", "Compra realizada con éxito.");
+            response.put("compra", cartItems);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        } finally {
+            pw.println(gson.toJson(response));
+            pw.flush();
+            if (cl != null && !cl.isClosed()) {
+                cl.close();
+            }
+        }
+    }
+
+    private static void actualizarInventarioCSV() throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("servidor/productos.csv"))) {
+            writer.println("id,nombre,descripcion,precio,stock,imagen,categoria");
+            for (Producto p : inventario) {
+                writer.println(String.format("%d,%s,\"%s\",%f,%d,%s,%s",
+                    p.id, p.nombre, p.descripcion, p.precio, p.stock, p.imagen, p.categoria));
+            }
         }
     }
 }
