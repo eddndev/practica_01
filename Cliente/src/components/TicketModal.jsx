@@ -6,7 +6,11 @@ const TicketModal = ({ ticket, onClose }) => {
     }
 
     const { compra, message } = ticket;
-    const subtotal = compra.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = compra.reduce((acc, item) => {
+        const price = item.precio || item.price || 0;
+        const quantity = item.quantity || 0;
+        return acc + (price * quantity);
+    }, 0);
     const total = subtotal; // Assuming no taxes or other fees for now
 
     return (
@@ -15,15 +19,20 @@ const TicketModal = ({ ticket, onClose }) => {
                 <h2 className="text-2xl font-bold mb-4 text-center">Resumen de Compra</h2>
                 <p className="text-center mb-4">{message}</p>
                 <div className="border-t border-b py-4">
-                    {compra.map(item => (
-                        <div key={item.id} className="flex justify-between items-center mb-2">
-                            <div>
-                                <p className="font-semibold">{item.name}</p>
-                                <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
+                    {compra.map(item => {
+                        const price = item.precio || item.price || 0;
+                        const name = item.nombre || item.name || 'Producto';
+                        const quantity = item.quantity || 0;
+                        return (
+                            <div key={item.id} className="flex justify-between items-center mb-2">
+                                <div>
+                                    <p className="font-semibold">{name}</p>
+                                    <p className="text-sm text-gray-600">Cantidad: {quantity}</p>
+                                </div>
+                                <p className="font-semibold">${(price * quantity).toFixed(2)}</p>
                             </div>
-                            <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
                 <div className="mt-4">
                     <div className="flex justify-between">

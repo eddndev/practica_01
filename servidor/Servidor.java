@@ -71,9 +71,14 @@ public class Servidor {
                             PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));
                             List<Producto> productosFiltrados = new ArrayList<>(inventario);
 
+                            // Filtrar solo productos con stock disponible
+                            productosFiltrados = productosFiltrados.stream()
+                                .filter(p -> p.stock >= 1)
+                                .collect(Collectors.toList());
+
                             if (command.startsWith("GET_CATEGORY:")) {
                                 String categoria = command.substring(13);
-                                productosFiltrados = inventario.stream()
+                                productosFiltrados = productosFiltrados.stream()
                                     .filter(p -> p.categoria.equalsIgnoreCase(categoria))
                                     .collect(Collectors.toList());
                             } else if (!command.equals("GET_ALL")) {
@@ -191,8 +196,8 @@ public class Servidor {
         try (PrintWriter writer = new PrintWriter(new FileWriter("servidor/productos.csv"))) {
             writer.println("id,nombre,descripcion,precio,stock,imagen,categoria");
             for (Producto p : inventario) {
-                writer.println(String.format("%d,%s,\"%s\",%f,%d,%s,%s",
-                    p.id, p.nombre, p.descripcion, p.precio, p.stock, p.imagen, p.categoria));
+                writer.println(String.format("%d,%s,\"%s\",%.0f,%d,%s,%s",
+                    p.id, p.nombre, p.descripcion, p.precio, p.stock, p.rutaImagen, p.categoria));
             }
         }
     }

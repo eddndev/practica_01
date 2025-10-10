@@ -21,7 +21,6 @@ function App() {
         ? data
         : data.filter(guitarra => guitarra.categoria.toLowerCase() === categoriaSeleccionada.toLowerCase())
 
-    const MAX_ITEMS = 5
     const MIN_ITEMS = 1
 
     useEffect(() => {
@@ -61,16 +60,24 @@ function App() {
 
         // Condicion para evitar duplicados y solo modificar la cantidad
         if (itemExist >= 0) { //Existe ya el item dentro del carrito
-            if (carro[itemExist].quantity >= MAX_ITEMS) 
-            return
+            // Verificar que no se exceda el stock disponible
+            if (carro[itemExist].quantity >= item.stock) {
+                alert(`No hay más stock disponible. Stock actual: ${item.stock}`);
+                return;
+            }
             //Si ya existe el elemento, lo que queremos hacer es solo aumentar la cantidad de elementos del item
             const updateCar = [...carro] //hacemos copia del array original
             updateCar[itemExist].quantity++ //Accedemos a la posicion del item y aumentamos la cantidad
             setCarro(updateCar) //seteamos las nuevas actualizaciones
-            
+
         }else{
+            // Verificar que haya stock disponible antes de agregar
+            if (item.stock < 1) {
+                alert('No hay stock disponible para este producto.');
+                return;
+            }
             // No existe, se agrega el item completo al carrito
-            item.quantity = 1 //Le agregamos la propiedad de cantidad al objeto, en este caso a la guitarra que sea agregada 
+            item.quantity = 1 //Le agregamos la propiedad de cantidad al objeto, en este caso a la guitarra que sea agregada
             setCarro([...carro, item]) //actualizamos el carro haciendo una copia del carro previo con el nuevo item que se vaya añadiendo al carro
         }
 
@@ -87,7 +94,12 @@ function App() {
     function increaseQuantity(id){
         const updateCar = carro.map(
             item => {
-            if (item.id === id && item.quantity < MAX_ITEMS) { // Si el id es el mismo que le estamos dando
+            if (item.id === id) { // Si el id es el mismo que le estamos dando
+                // Verificar que no se exceda el stock disponible
+                if (item.quantity >= item.stock) {
+                    alert(`No hay más stock disponible. Stock actual: ${item.stock}`);
+                    return item;
+                }
                 return {
                     ...item,
                     quantity: item.quantity + 1

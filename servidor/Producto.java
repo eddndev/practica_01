@@ -1,5 +1,5 @@
 public class Producto {
-    // Este es un POJO (Plain Old Java Object). 
+    // Este es un POJO (Plain Old Java Object).
     // Gson lo convertira a JSON automaticamente.
     int id;
     String nombre;
@@ -8,6 +8,7 @@ public class Producto {
     int stock;
     String rutaImagen;
     String categoria;
+    int quantity;
 
     public Producto(int id, String nombre, String descripcion, double precio, int stock, String rutaImagen, String categoria) {
         this.id = id;
